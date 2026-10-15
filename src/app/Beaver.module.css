@@ -1,0 +1,1830 @@
+.beaver {
+  --outline: #3a2216;
+
+  width: clamp(12rem, min(55vw, 34vh), 24rem);
+  height: auto;
+  /* Block, so no gap opens up under it for text descenders. */
+  display: block;
+  overflow: visible;
+}
+
+/* Let transform-origin use SVG coordinates. */
+.beaver g {
+  transform-box: view-box;
+}
+
+.shadow {
+  fill: rgba(0, 0, 0, 0.28);
+}
+
+.fur,
+.furDark,
+.tail {
+  stroke: var(--outline);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+
+.fur {
+  fill: url(#beaver-fur);
+}
+
+.furDark {
+  fill: #6a3f26;
+}
+
+.belly {
+  fill: url(#beaver-belly);
+}
+
+.tail {
+  fill: url(#beaver-tail);
+}
+
+.headOutline {
+  fill: var(--outline);
+  stroke: var(--outline);
+  stroke-width: 3;
+}
+
+.headFill {
+  fill: url(#beaver-fur);
+}
+
+.earInner {
+  fill: #c4876a;
+}
+
+.fluff {
+  fill: none;
+  stroke: var(--outline);
+  stroke-width: 1.2;
+  stroke-linejoin: round;
+}
+
+.blush {
+  fill: #f2857a;
+  opacity: 0.45;
+}
+
+.detail,
+.whiskers {
+  fill: none;
+  stroke: var(--outline);
+  stroke-width: 1;
+  stroke-linecap: round;
+}
+
+.whiskers {
+  stroke: #f6e6cf;
+  stroke-width: 0.7;
+  opacity: 0.7;
+}
+
+.teeth {
+  fill: #fffaf0;
+  stroke: var(--outline);
+  stroke-width: 1.2;
+}
+
+.nose,
+.eye {
+  fill: #23140c;
+}
+
+.noseShine {
+  fill: #fff;
+  opacity: 0.5;
+}
+
+.shine {
+  fill: #fff;
+}
+
+.brows {
+  fill: none;
+  stroke: var(--outline);
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  opacity: 0.7;
+}
+
+.eyesClosed {
+  fill: none;
+  stroke: #23140c;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+/* Laptop */
+.deck {
+  fill: #c3ccc8;
+}
+
+.edge {
+  fill: #8f9a95;
+}
+
+.edgeDark {
+  fill: #75807b;
+}
+
+.keys {
+  fill: none;
+  stroke: #8f9a95;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+}
+
+.lid {
+  fill: #a9b3ae;
+  stroke: #75807b;
+  stroke-width: 0.8;
+  stroke-linejoin: round;
+}
+
+.screen {
+  fill: #12231f;
+  transition: fill 0.4s;
+}
+
+.screenLines {
+  fill: none;
+  stroke: #0f5c4b;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.led {
+  fill: var(--accent, #f4b942);
+  animation: ledPulse 3s ease-in-out infinite;
+}
+
+.glow {
+  opacity: 0;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  transition: opacity 0.4s;
+}
+
+/* Reading between checks: glasses on, book up, eyes scanning the lines. */
+.book,
+.bookBehind {
+  opacity: 0;
+}
+
+.glasses {
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.reading .eyesOpen,
+.stowing .eyesOpen {
+  opacity: 1;
+}
+
+.reading .eyesClosed,
+.reading .zzz,
+.reading .restingPaws,
+.stowing .eyesClosed,
+.stowing .zzz,
+.stowing .restingPaws {
+  opacity: 0;
+}
+
+/* Pulling the book out from behind it: the paws reach back, the closed book comes
+   out past its right side (toward the laptop), comes around to the front and opens,
+   then the glasses go on. Putting it away is the same in reverse. */
+.backHinge {
+  transform-box: view-box;
+  transform-origin: 118px 104px;
+}
+
+.reading .bookBehind {
+  animation: behindOut 1.6s ease-in-out both;
+}
+
+.reading .book {
+  animation: bookIn 1.6s ease-in-out both;
+}
+
+.reading .backHinge {
+  animation: hingeOpen 1.6s ease-in-out both;
+}
+
+.reading .glasses {
+  animation: glassesOn 1.6s ease-out both;
+}
+
+.reading .restingPaws {
+  animation: pawsReachBack 0.5s ease-in both;
+}
+
+@keyframes pawsReachBack {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.stowing .bookBehind {
+  animation: behindIn 1.3s ease-in-out both;
+}
+
+.stowing .book {
+  animation: bookOut 1.3s ease-in-out both;
+}
+
+.stowing .backHinge {
+  animation: hingeClose 1.3s ease-in-out both;
+}
+
+.stowing .pageHand {
+  animation: pawHide 1.3s both;
+}
+
+@keyframes behindOut {
+  0% {
+    opacity: 1;
+    transform: none;
+  }
+  35% {
+    opacity: 1;
+    transform: translate(36px, -18px);
+  }
+  36%,
+  100% {
+    opacity: 0;
+    transform: translate(36px, -18px);
+  }
+}
+
+@keyframes bookIn {
+  0%,
+  35% {
+    opacity: 0;
+    transform: translate(10px, -4px);
+  }
+  36% {
+    opacity: 1;
+    transform: translate(10px, -4px);
+  }
+  85%,
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes hingeOpen {
+  0%,
+  45% {
+    transform: scaleX(0);
+  }
+  85%,
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes glassesOn {
+  0%,
+  75% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes bookOut {
+  0% {
+    opacity: 1;
+    transform: none;
+  }
+  50% {
+    opacity: 1;
+    transform: translate(10px, -4px);
+  }
+  51%,
+  100% {
+    opacity: 0;
+    transform: translate(10px, -4px);
+  }
+}
+
+@keyframes hingeClose {
+  0% {
+    transform: scaleX(1);
+  }
+  40%,
+  100% {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes behindIn {
+  0%,
+  50% {
+    opacity: 0;
+    transform: translate(36px, -18px);
+  }
+  51% {
+    opacity: 1;
+    transform: translate(36px, -18px);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* The page-turning paw hides while the book is closed. */
+@keyframes pawShow {
+  0%,
+  80% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes pawHide {
+  0% {
+    opacity: 1;
+  }
+  20%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.reading .head {
+  transform: rotate(4deg) translateY(1px);
+}
+
+.reading .eyesOpen {
+  /* Starts once the book is open. */
+  animation: scan 3.2s ease-in-out 1.6s infinite;
+}
+
+.glasses {
+  fill: rgba(220, 240, 255, 0.12);
+  stroke: #2a1a10;
+  stroke-width: 1.1;
+  stroke-linecap: round;
+}
+
+.bookCover {
+  fill: #1f4f45;
+  stroke: #0f2a24;
+  stroke-width: 0.8;
+}
+
+/* The other books' covers and pictures */
+.spine_teeth {
+  fill: #6e2340;
+}
+
+.spine_water {
+  fill: #213e61;
+}
+
+.cover_teeth {
+  fill: #8e2f4f;
+  stroke: #561b30;
+}
+
+.cover_water {
+  fill: #2b4f7a;
+  stroke: #182f4a;
+}
+
+.bookPink {
+  fill: #f7c9cf;
+}
+
+.bookSmile {
+  fill: none;
+  stroke: #5a1d2f;
+  stroke-width: 1.2;
+  stroke-linecap: round;
+}
+
+.bookTooth {
+  fill: #fffaf0;
+  stroke: #5a1d2f;
+  stroke-width: 0.6;
+}
+
+.bookSparkle {
+  stroke: #f4b942;
+  stroke-width: 0.7;
+  stroke-linecap: round;
+}
+
+.bookCalm {
+  fill: #d6ecf2;
+}
+
+.bookFaucet {
+  fill: none;
+  stroke: #8d969a;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.bookFaucetHandle {
+  stroke: #6b7478;
+  stroke-width: 1.1;
+  stroke-linecap: round;
+}
+
+.bookDrop {
+  fill: #3f8fa6;
+}
+
+.bookStress {
+  stroke: #c0392b;
+  stroke-width: 0.8;
+  stroke-linecap: round;
+}
+
+.bookSpine {
+  fill: #163b33;
+  stroke: #0f2a24;
+  stroke-width: 0.6;
+}
+
+.bookTitle {
+  font-family: var(--font-display), Impact, sans-serif;
+  fill: #f6e9c8;
+}
+
+.bookBlurb {
+  stroke: #f6e9c8;
+  stroke-width: 0.9;
+  stroke-linecap: round;
+  opacity: 0.45;
+}
+
+.bookBarcode {
+  fill: #f6e9c8;
+}
+
+.bookBars {
+  stroke: #1f2a26;
+  stroke-width: 0.6;
+}
+
+.bookSky {
+  fill: #f3d6a0;
+}
+
+.bookWater {
+  fill: #3f8fa6;
+}
+
+.bookCanyon {
+  fill: #b5663d;
+}
+
+.bookDam {
+  fill: #dcd7cb;
+  stroke: #8f8a80;
+  stroke-width: 0.35;
+}
+
+.bookDamLines {
+  fill: none;
+  stroke: #b3ada1;
+  stroke-width: 0.3;
+}
+
+.bookTower {
+  fill: #efebe1;
+}
+
+.bookFrame {
+  fill: none;
+  stroke: #f6e9c8;
+  stroke-width: 0.6;
+}
+
+/* Turning a page once every 6 passes of the eyes across the lines (6 × 3.2s), at
+   the end of a line. The paw slips behind the book first, the page swings up
+   through the gap at the top, and the paw only comes back a beat after the page
+   is done. */
+.pageTurn {
+  fill: #fbf6e8;
+  stroke: #b9ad92;
+  stroke-width: 0.4;
+  opacity: 0;
+  transform-box: view-box;
+  transform-origin: 118px 84px;
+}
+
+.pageHand {
+  transform-box: view-box;
+}
+
+.reading .pageTurn {
+  animation: turnPage 19.2s ease-in-out 1.6s infinite;
+}
+
+.reading .pageHand {
+  animation:
+    pawShow 1.6s both,
+    turnHand 19.2s ease-in-out 1.6s infinite;
+}
+
+/* The eyes reach the end of a line halfway through each 3.2s scan, so the turn
+   starts at 5.5 scans (17.6s, ~91.7%) and the paw comes back early in the next cycle. */
+@keyframes turnPage {
+  0%,
+  91.6% {
+    opacity: 0;
+    transform: rotate(-80deg);
+  }
+  92% {
+    opacity: 1;
+    transform: rotate(-62deg);
+  }
+  95.8% {
+    transform: rotate(0deg);
+  }
+  99.4% {
+    opacity: 1;
+    transform: rotate(62deg);
+  }
+  99.8%,
+  100% {
+    opacity: 0;
+    transform: rotate(80deg);
+  }
+}
+
+@keyframes turnHand {
+  /* Hidden behind the book from before the page appears until a beat after it's gone
+     (which is just into the next cycle). */
+  0%,
+  2% {
+    transform: translate(18px, -9px);
+  }
+  5%,
+  88% {
+    transform: none;
+  }
+  91%,
+  100% {
+    transform: translate(18px, -9px);
+  }
+}
+
+@keyframes scan {
+  0%,
+  100% {
+    transform: translateX(-1.2px);
+  }
+  50% {
+    transform: translateX(1.2px);
+  }
+}
+
+/* Twiddling its thumbs, tapping its tail and whistling, all at once. */
+.pucker {
+  opacity: 0;
+}
+
+.puffCheek {
+  fill: url(#beaver-belly);
+}
+
+.whistle {
+  font-family: system-ui, sans-serif;
+  fill: var(--accent, #f4b942);
+  opacity: 0;
+}
+
+.twiddling .eyesOpen,
+.twiddling .pucker,
+.twiddling .whistle {
+  opacity: 1;
+}
+
+.twiddling .eyesClosed,
+.twiddling .zzz,
+.twiddling .smile {
+  opacity: 0;
+}
+
+/* Eyes wander, all innocent-like. */
+.twiddling .eyesOpen {
+  animation: lookAround 4s ease-in-out infinite;
+}
+
+.twiddling .head {
+  animation: bob 0.8s ease-in-out infinite alternate;
+}
+
+.twiddleBack,
+.twiddleFront {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.twiddling .twiddleBack {
+  animation: twiddleA 0.7s linear infinite;
+}
+
+.twiddling .twiddleFront {
+  animation: twiddleB 0.7s linear infinite;
+}
+
+.tailTap {
+  transform-origin: 72px 138px;
+}
+
+.twiddling .tailTap {
+  animation: tailTap 0.8s ease-in infinite;
+}
+
+.whistle text {
+  opacity: 0;
+}
+
+.twiddling .whistle text {
+  animation: whistleNote 2.4s ease-out infinite;
+}
+
+.twiddling .whistle text:nth-child(2) {
+  animation-delay: 0.8s;
+}
+
+.twiddling .whistle text:nth-child(3) {
+  animation-delay: 1.6s;
+}
+
+@keyframes lookAround {
+  0%,
+  100% {
+    transform: none;
+  }
+  25% {
+    transform: translate(1.5px, -1.5px);
+  }
+  50% {
+    transform: translate(-1.5px, -1.2px);
+  }
+  75% {
+    transform: translate(1px, 0);
+  }
+}
+
+@keyframes bob {
+  from {
+    transform: rotate(-1.5deg);
+  }
+  to {
+    transform: rotate(1.5deg);
+  }
+}
+
+@keyframes twiddleA {
+  0% {
+    transform: translate(2.5px, 0);
+  }
+  25% {
+    transform: translate(0, 2.5px);
+  }
+  50% {
+    transform: translate(-2.5px, 0);
+  }
+  75% {
+    transform: translate(0, -2.5px);
+  }
+  100% {
+    transform: translate(2.5px, 0);
+  }
+}
+
+@keyframes twiddleB {
+  0% {
+    transform: translate(-2.5px, 0);
+  }
+  25% {
+    transform: translate(0, -2.5px);
+  }
+  50% {
+    transform: translate(2.5px, 0);
+  }
+  75% {
+    transform: translate(0, 2.5px);
+  }
+  100% {
+    transform: translate(-2.5px, 0);
+  }
+}
+
+/* Up, then a quick slap down on the beat. */
+@keyframes tailTap {
+  0%,
+  100% {
+    transform: none;
+  }
+  60% {
+    transform: rotate(10deg);
+  }
+  85% {
+    transform: rotate(-1deg);
+  }
+}
+
+@keyframes whistleNote {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(14px, -26px);
+  }
+}
+
+/* Knitting between checks: pulled out from behind like the book, then the needles
+   click while the scarf slowly grows. Glasses on, like when reading. */
+.knit,
+.knitBehind {
+  opacity: 0;
+}
+
+.knitting .eyesOpen,
+.stowingKnit .eyesOpen {
+  opacity: 1;
+}
+
+.knitting .eyesClosed,
+.knitting .zzz,
+.knitting .restingPaws,
+.stowingKnit .eyesClosed,
+.stowingKnit .zzz,
+.stowingKnit .restingPaws {
+  opacity: 0;
+}
+
+.knitting .restingPaws {
+  animation: pawsReachBack 0.5s ease-in both;
+}
+
+.knitting .glasses {
+  animation: glassesOn 1.6s ease-out both;
+}
+
+.knitting .head {
+  transform: rotate(6deg) translateY(1px);
+}
+
+.knitting .knitBehind {
+  animation: branchBehindOut 1.4s ease-in-out both;
+}
+
+.knitting .knit {
+  animation: branchIn 1.4s ease-in-out both;
+}
+
+.stowingKnit .knit {
+  animation: branchOut 1.2s ease-in-out both;
+}
+
+.stowingKnit .knitBehind {
+  animation: branchBehindIn 1.2s ease-in-out both;
+}
+
+.needleLeft {
+  transform-origin: 122px 100px;
+}
+
+.needleRight {
+  transform-origin: 122px 100px;
+}
+
+.knitting .needleLeft {
+  animation: clickLeft 0.5s ease-in-out 1.4s infinite alternate;
+}
+
+.knitting .needleRight {
+  animation: clickRight 0.5s ease-in-out 1.4s infinite alternate;
+}
+
+.scarf {
+  transform-origin: 121px 101px;
+}
+
+/* The scarf grows over about a minute of knitting. */
+.knitting .scarf {
+  animation: scarfGrow 60s linear 1.4s both;
+}
+
+.yarnBall {
+  transform-origin: 96px 146px;
+}
+
+.knitting .yarnBall {
+  animation: yarnWobble 1s ease-in-out 1.4s infinite alternate;
+}
+
+.needle {
+  fill: none;
+  stroke: #c9ced1;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+.needleKnob {
+  fill: #f4b942;
+}
+
+.needleTip {
+  fill: #c9ced1;
+}
+
+.yarn {
+  fill: #ff7a59;
+  stroke: #b34a30;
+  stroke-width: 0.8;
+}
+
+.yarnLines {
+  fill: none;
+  stroke: #c9563a;
+  stroke-width: 0.8;
+  stroke-linecap: round;
+}
+
+.strand {
+  fill: none;
+  stroke: #ff7a59;
+  stroke-width: 0.9;
+}
+
+.scarfBody {
+  fill: #f4b942;
+  stroke: #a87a1f;
+  stroke-width: 0.7;
+}
+
+.scarfStripeA {
+  fill: #3cc3a0;
+}
+
+.scarfStripeB {
+  fill: #ff7a59;
+}
+
+.stitches {
+  fill: none;
+  stroke: rgba(0, 0, 0, 0.25);
+  stroke-width: 0.6;
+  stroke-linecap: round;
+}
+
+.fringe {
+  stroke: #f4b942;
+  stroke-width: 1;
+  stroke-linecap: round;
+}
+
+@keyframes clickLeft {
+  from {
+    transform: rotate(-5deg);
+  }
+  to {
+    transform: rotate(4deg);
+  }
+}
+
+@keyframes clickRight {
+  from {
+    transform: rotate(5deg);
+  }
+  to {
+    transform: rotate(-4deg);
+  }
+}
+
+@keyframes scarfGrow {
+  from {
+    transform: scaleY(0.5);
+  }
+  to {
+    transform: scaleY(1.15);
+  }
+}
+
+@keyframes yarnWobble {
+  from {
+    transform: rotate(-8deg);
+  }
+  to {
+    transform: rotate(8deg);
+  }
+}
+
+/* Gnawing a branch between checks: pulled out from behind its right side like
+   the book, then chewed back and forth like corn on the cob. */
+.branch,
+.branchBehind,
+.chips {
+  opacity: 0;
+}
+
+.gnawing .eyesOpen,
+.stowingBranch .eyesOpen {
+  opacity: 1;
+}
+
+.gnawing .eyesClosed,
+.gnawing .zzz,
+.gnawing .restingPaws,
+.stowingBranch .eyesClosed,
+.stowingBranch .zzz,
+.stowingBranch .restingPaws {
+  opacity: 0;
+}
+
+.gnawing .restingPaws {
+  animation: pawsReachBack 0.5s ease-in both;
+}
+
+.gnawing .branchBehind {
+  animation: branchBehindOut 1.4s ease-in-out both;
+}
+
+.gnawing .branch {
+  animation: branchIn 1.4s ease-in-out both;
+}
+
+.gnawing .branchChew {
+  animation: chew 1.2s ease-in-out 1.4s infinite alternate;
+}
+
+.gnawing .chips {
+  opacity: 1;
+}
+
+/* The regular teeth show while the branch is coming or going; once it's in the
+   mouth, the chomping teeth (drawn over the branch) take over. */
+.chompTeeth {
+  opacity: 0;
+}
+
+.gnawing .headTeeth {
+  animation: teethOff 1.4s step-end both;
+}
+
+.gnawing .chompTeeth {
+  animation:
+    teethOn 1.4s step-end both,
+    chompTeeth 0.36s ease-in-out 1.4s infinite;
+}
+
+@keyframes teethOff {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes teethOn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.gnawing .branchChew > * {
+  animation: biteDip 0.36s ease-in-out 1.4s infinite;
+}
+
+@keyframes chompTeeth {
+  0%,
+  100% {
+    transform: none;
+  }
+  45% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes biteDip {
+  0%,
+  100% {
+    transform: translateY(0.8px);
+  }
+  45% {
+    transform: none;
+  }
+}
+
+.gnawing .chips ellipse {
+  opacity: 0;
+  /* Spin each chip around itself, not the corner of the drawing. */
+  transform-box: fill-box;
+  transform-origin: center;
+  fill: #e2b77f;
+  animation: chip 0.9s ease-out 1.4s infinite;
+}
+
+.gnawing .chips ellipse:nth-child(2) {
+  animation-delay: 1.7s;
+}
+
+.gnawing .chips ellipse:nth-child(3) {
+  animation-delay: 2s;
+}
+
+.stowingBranch .branch {
+  animation: branchOut 1.2s ease-in-out both;
+}
+
+.stowingBranch .branchBehind {
+  animation: branchBehindIn 1.2s ease-in-out both;
+}
+
+.bark {
+  fill: #7a5236;
+  stroke: #3a2216;
+  stroke-width: 0.8;
+}
+
+.barkMark {
+  stroke: #4e3220;
+  stroke-width: 0.8;
+  stroke-linecap: round;
+}
+
+.gnawed {
+  fill: #ecc896;
+}
+
+.twig {
+  fill: none;
+  stroke: #6a4129;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+}
+
+.aspenLeaf {
+  fill: #9fd356;
+  stroke: #5e8a2c;
+  stroke-width: 0.5;
+}
+
+@keyframes branchBehindOut {
+  0% {
+    opacity: 1;
+    transform: none;
+  }
+  40% {
+    opacity: 1;
+    transform: translate(45px, -20px);
+  }
+  41%,
+  100% {
+    opacity: 0;
+    transform: translate(45px, -20px);
+  }
+}
+
+@keyframes branchIn {
+  0%,
+  40% {
+    opacity: 0;
+    transform: translate(13px, -5px);
+  }
+  41% {
+    opacity: 1;
+    transform: translate(13px, -5px);
+  }
+  85%,
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes branchOut {
+  0% {
+    opacity: 1;
+    transform: none;
+  }
+  45% {
+    opacity: 1;
+    transform: translate(13px, -5px);
+  }
+  46%,
+  100% {
+    opacity: 0;
+    transform: translate(13px, -5px);
+  }
+}
+
+@keyframes branchBehindIn {
+  0%,
+  45% {
+    opacity: 0;
+    transform: translate(45px, -20px);
+  }
+  46% {
+    opacity: 1;
+    transform: translate(45px, -20px);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes chew {
+  from {
+    transform: translateX(-7px);
+  }
+  to {
+    transform: translateX(7px);
+  }
+}
+
+@keyframes chip {
+  0% {
+    opacity: 0;
+    transform: none;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(9px, 10px) rotate(120deg);
+  }
+}
+
+/* No results, flop: face down on the keyboard, paws flat. */
+.sad.flop .head {
+  transform: rotate(32deg) translate(3px, 7px);
+}
+
+.sad.flop .eyesOpen,
+.sad.flop .sadFace,
+.sad.flop .restingPaws {
+  opacity: 0;
+}
+
+.sad.flop .eyesClosed,
+.sad.flop .typing {
+  opacity: 1;
+}
+
+/* No results, facepalm: head down, eyes shut, one paw over the face. */
+.sad.facepalm .head {
+  transform: rotate(10deg) translateY(2px);
+}
+
+.sad.facepalm .eyesOpen,
+.sad.facepalm .sadFace,
+.sad.facepalm .twiddleFront {
+  opacity: 0;
+}
+
+.sad.facepalm .eyesClosed {
+  opacity: 1;
+}
+
+.sad.facepalm .cheer,
+.sad.facepalm .cheerNear {
+  opacity: 1;
+}
+
+.sad.facepalm .cheerFar {
+  opacity: 0;
+}
+
+.sad.facepalm .cheerNear {
+  transform: translate(-6px, -20px) rotate(-38deg);
+}
+
+/* Fake-out: a gasp, eyes wide, paws frozen on the keys. */
+.fakeout .eyesOpen,
+.fakeout .typing {
+  opacity: 1;
+}
+
+.fakeout .eyesClosed,
+.fakeout .restingPaws,
+.fakeout .zzz {
+  opacity: 0;
+}
+
+.fakeout .head {
+  transform: rotate(-9deg) translateY(-4px);
+}
+
+.beaver.fakeout {
+  animation: hop 0.45s ease-out;
+}
+
+.fakeout .screen {
+  fill: url(#beaver-screen);
+}
+
+.fakeout .glow {
+  opacity: 0.9;
+}
+
+.fakeout .led {
+  fill: var(--sage, #3cc3a0);
+  animation: none;
+}
+
+/* Curled up asleep, before checking starts. The curled and sitting beavers
+   cross-fade, and the laptop slides in, when it wakes for the first check. */
+.curl {
+  opacity: 0;
+  transform: translateY(6px);
+  transform-origin: 100px 148px;
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
+}
+
+.curlEyes {
+  fill: none;
+  stroke: #23140c;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.curled .curl,
+.waking .curl {
+  opacity: 1;
+  transform: none;
+}
+
+.curled .curl {
+  animation: breathe 3.6s ease-in-out infinite;
+}
+
+.body {
+  transition:
+    opacity 0.45s ease 0.25s,
+    transform 0.5s cubic-bezier(0.34, 1.4, 0.64, 1) 0.25s;
+}
+
+.laptop {
+  transition:
+    opacity 0.5s ease 0.45s,
+    transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.45s;
+}
+
+.curled .body,
+.waking .body {
+  opacity: 0;
+  transform: translateY(10px) scale(0.96);
+}
+
+.curled .laptop,
+.waking .laptop {
+  opacity: 0;
+  transform: translateX(24px);
+}
+
+.curled .zzz {
+  transform: translate(32px, 40px);
+}
+
+/* Stirring awake: one eye open, a stretch and a yawn */
+.waking .zzz {
+  opacity: 0;
+}
+
+.waking .peekEye {
+  display: inline;
+}
+
+.beaver.waking {
+  animation: stir 0.9s ease-in-out 2;
+}
+
+/* Poking a sleeping beaver */
+.pokeButton {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.pokeButton:disabled {
+  cursor: default;
+}
+
+.pokeButton:focus-visible {
+  outline: none;
+}
+
+.peekEye,
+.grumpyFace {
+  display: none;
+}
+
+.peek .peekEye,
+.grumpy .peekEye,
+.grumpy .grumpyFace {
+  display: inline;
+}
+
+.scowl {
+  fill: none;
+  stroke: var(--outline);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+.stir .zzz,
+.peek .zzz,
+.grumpy .zzz {
+  opacity: 0;
+}
+
+.beaver.stir {
+  animation: stir 0.5s ease-in-out;
+}
+
+.beaver.grumpy {
+  animation: shake 0.4s ease-in-out;
+}
+
+.bubble {
+  transform-origin: 90px 30px;
+  animation: pop 0.25s ease-out;
+}
+
+.bubble rect,
+.bubble path {
+  fill: var(--text, #f6f1e4);
+}
+
+.bubble text {
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  fill: #1c2a25;
+}
+
+.curled .bubbleSpot,
+.waking .bubbleSpot {
+  transform: translate(40px, 48px);
+}
+
+@keyframes stir {
+  30% {
+    transform: rotate(-2deg);
+  }
+  65% {
+    transform: rotate(1.5deg);
+  }
+}
+
+@keyframes hop {
+  40% {
+    transform: translateY(-6%);
+  }
+}
+
+@keyframes shake {
+  20%,
+  60% {
+    transform: translateX(-4px);
+  }
+  40%,
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+/* Napping */
+.body {
+  transform-origin: 90px 148px;
+}
+
+.asleep .body {
+  animation: breathe 3.2s ease-in-out infinite;
+}
+
+.head {
+  transform-origin: 104px 94px;
+  transition: transform 0.6s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.asleep .head {
+  transform: rotate(14deg) translateY(3px);
+}
+
+.eyesOpen,
+.typing,
+.sadFace,
+.happyFace,
+.cheer,
+.notes {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.zzz {
+  font-family: var(--font-display), Impact, sans-serif;
+  fill: var(--text, #f6f1e4);
+  transition: opacity 0.3s;
+}
+
+.zzz text {
+  opacity: 0;
+  animation: float 2.4s ease-out infinite;
+}
+
+.zzz text:nth-child(2) {
+  animation-delay: 0.8s;
+}
+
+.zzz text:nth-child(3) {
+  animation-delay: 1.6s;
+}
+
+/* Checking, and sad when there's nothing yet */
+.checking .eyesOpen,
+.checking .typing,
+.sad .eyesOpen,
+.sad .sadFace,
+.excited .eyesOpen,
+.letdown .eyesOpen,
+.letdown .sadFace {
+  opacity: 1;
+}
+
+.checking .eyesClosed,
+.checking .restingPaws,
+.checking .zzz,
+.sad .eyesClosed,
+.sad .zzz,
+.sad .eyesOpen .brows,
+.sad .smile,
+.excited .eyesClosed,
+.excited .zzz,
+.letdown .eyesClosed,
+.letdown .zzz,
+.letdown .eyesOpen .brows,
+.letdown .smile {
+  opacity: 0;
+}
+
+/* Poked while napping at the laptop: hopeful, then let down */
+.asleep.excited .head {
+  transform: rotate(-6deg) translateY(-3px);
+}
+
+.asleep.letdown .head {
+  transform: rotate(8deg) translateY(1.5px);
+}
+
+.beaver.excited {
+  animation: hop 0.45s ease-out;
+}
+
+.excited .screen,
+.letdown .screen {
+  fill: url(#beaver-screen);
+}
+
+.excited .glow {
+  opacity: 0.6;
+}
+
+.letdown .glow {
+  opacity: 0.3;
+}
+
+.letdown .tear {
+  animation: drip 1.6s ease-in infinite;
+}
+
+.checking .head {
+  transform: rotate(-3deg);
+}
+
+.sad .head {
+  transform: rotate(8deg) translateY(1.5px);
+}
+
+.checking .screen,
+.sad .screen {
+  fill: url(#beaver-screen);
+}
+
+.checking .screenLines {
+  opacity: 0.8;
+  animation: flicker 0.9s steps(3) infinite;
+}
+
+.checking .glow {
+  opacity: 0.6;
+}
+
+.sad .glow {
+  opacity: 0.3;
+}
+
+.checking .led,
+.sad .led {
+  fill: var(--sage, #3cc3a0);
+  animation: none;
+}
+
+/* Dozed off with the laptop still on; it goes dark a few seconds later. */
+.screenOn .screen {
+  fill: url(#beaver-screen);
+}
+
+.screenOn .glow {
+  opacity: 0.3;
+}
+
+.screenOn .led {
+  fill: var(--sage, #3cc3a0);
+  animation: none;
+}
+
+.lids {
+  fill: #93603f;
+}
+
+.tear {
+  fill: #c9eef7;
+  stroke: #7fb9c8;
+  stroke-width: 0.5;
+}
+
+.sad .tear {
+  animation: drip 1.6s ease-in infinite;
+}
+
+.armNear {
+  transform-origin: 110px 110px;
+}
+
+.armFar {
+  transform-origin: 114px 104px;
+}
+
+.checking .armNear {
+  animation: tap 0.22s ease-in-out infinite alternate;
+}
+
+.checking .armFar {
+  animation: tap 0.22s ease-in-out 0.11s infinite alternate;
+}
+
+/* Dancing: three poses on a loop, flipbook style */
+.limbOutline,
+.limb {
+  fill: none;
+  stroke-linecap: round;
+}
+
+.limbOutline {
+  stroke: var(--outline);
+  stroke-width: 11;
+}
+
+.limb {
+  stroke: #94603e;
+  stroke-width: 8;
+}
+
+.limbDark {
+  stroke: #6a3f26;
+}
+
+.grin {
+  fill: none;
+  stroke: var(--outline);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+.notes {
+  font-family: system-ui, sans-serif;
+  fill: var(--accent, #f4b942);
+}
+
+.dancing .happyFace,
+.dancing .cheer,
+.dancing .notes {
+  opacity: 1;
+}
+
+.dancing .eyesClosed,
+.dancing .restingPaws,
+.dancing .zzz,
+.dancing .smile {
+  opacity: 0;
+}
+
+/* The happy squint uses the closed-eye style, so bring it back inside the happy face. */
+.dancing .happyFace .eyesClosed {
+  opacity: 1;
+}
+
+.dancing .screen {
+  fill: url(#beaver-screen);
+}
+
+.dancing .glow {
+  opacity: 0.5;
+}
+
+.dancing .led {
+  fill: var(--sage, #3cc3a0);
+  animation: none;
+}
+
+.dancing .body {
+  animation: danceBody 0.9s steps(1, end) infinite;
+}
+
+.dancing .head {
+  transition: none;
+  animation: danceHead 0.9s steps(1, end) infinite;
+}
+
+.cheerNear {
+  transform-origin: 106px 105px;
+}
+
+.cheerFar {
+  transform-origin: 86px 98px;
+}
+
+.dancing .cheerNear {
+  animation: danceNear 0.9s steps(1, end) infinite;
+}
+
+.dancing .cheerFar {
+  animation: danceFar 0.9s steps(1, end) infinite;
+}
+
+.notes text {
+  animation: float 1.8s ease-out infinite;
+}
+
+.notes text:nth-child(2) {
+  animation-delay: 0.45s;
+}
+
+.notes text:nth-child(3) {
+  animation-delay: 0.9s;
+}
+
+.notes text:nth-child(4) {
+  animation-delay: 1.35s;
+}
+
+@keyframes danceBody {
+  0% {
+    transform: rotate(-7deg);
+  }
+  33.33% {
+    transform: translateY(-6px);
+  }
+  66.67% {
+    transform: rotate(7deg);
+  }
+}
+
+@keyframes danceHead {
+  0% {
+    transform: rotate(8deg);
+  }
+  33.33% {
+    transform: rotate(-2deg);
+  }
+  66.67% {
+    transform: rotate(-10deg);
+  }
+}
+
+@keyframes danceNear {
+  0% {
+    transform: rotate(18deg);
+  }
+  33.33% {
+    transform: rotate(-3deg);
+  }
+  66.67% {
+    transform: rotate(4deg);
+  }
+}
+
+@keyframes danceFar {
+  0% {
+    transform: rotate(-15deg);
+  }
+  33.33% {
+    transform: rotate(5deg);
+  }
+  66.67% {
+    transform: rotate(15deg);
+  }
+}
+
+@keyframes breathe {
+  50% {
+    transform: scale(1.02, 1.035);
+  }
+}
+
+@keyframes float {
+  0% {
+    opacity: 0;
+    transform: translate(0, 4px);
+  }
+  30% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(8px, -12px);
+  }
+}
+
+@keyframes tap {
+  to {
+    transform: rotate(-2.5deg);
+  }
+}
+
+@keyframes drip {
+  0% {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(9px);
+  }
+}
+
+@keyframes flicker {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@keyframes ledPulse {
+  50% {
+    opacity: 0.2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .beaver *,
+  .beaver g {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .zzz text {
+    opacity: 0.8;
+  }
+}

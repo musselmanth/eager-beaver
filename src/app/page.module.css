@@ -1,0 +1,1065 @@
+.page {
+  /* Deliberately not red/blue: these are local, nonpartisan races. */
+  --bg: #0b1614;
+  --accent: #f4b942; /* marigold */
+  --clay: #ff7a59; /* coral */
+  --sage: #3cc3a0; /* jade */
+  --text: #f6f1e4;
+  --muted: #9fb3ab;
+
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: radial-gradient(ellipse at top, #173a32 0%, var(--bg) 60%);
+  color: var(--text);
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+/* This layout doesn't load globals.css, so reset browser defaults here. */
+.page *,
+.page *::before,
+.page *::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+/* Drifting background glows */
+.glowA,
+.glowB {
+  position: fixed;
+  width: 60vmax;
+  height: 60vmax;
+  border-radius: 50%;
+  filter: blur(110px);
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.glowA {
+  background: var(--clay);
+  top: -30vmax;
+  left: -20vmax;
+  animation: drift 18s ease-in-out infinite alternate;
+}
+
+.glowB {
+  background: var(--sage);
+  bottom: -30vmax;
+  right: -20vmax;
+  animation: drift 22s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes drift {
+  to {
+    transform: translate(15vmax, 10vmax) scale(1.15);
+  }
+}
+
+.topBar {
+  position: relative;
+  z-index: 1;
+  /* Left, center (About) and right, with About always in the middle. */
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  padding: clamp(0.75rem, 2.2vh, 1.25rem) clamp(1rem, 4vw, 2.5rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: clamp(0.75rem, 1.6vw, 1rem);
+}
+
+.live {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.liveDot {
+  width: 0.7em;
+  height: 0.7em;
+  border-radius: 50%;
+  background: var(--clay);
+  box-shadow: 0 0 0 0 var(--clay);
+  animation: pulse 1.6s infinite;
+}
+
+@keyframes pulse {
+  70% {
+    box-shadow: 0 0 0 0.8em transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+.topRight {
+  display: inline-flex;
+  align-items: center;
+  justify-self: end;
+  gap: 1rem;
+}
+
+.clock {
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+
+.fullscreenButton {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border-radius: 0.6rem;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.fullscreenButton:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.fullscreenButton svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.content {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.5rem, 2.6vh, 2.5rem);
+  padding: 1rem;
+  text-align: center;
+}
+
+.badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.05;
+  padding: clamp(0.6rem, 1.5vw, 0.9rem) clamp(1.25rem, 3vw, 2rem);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(8px);
+}
+
+.badgeCounty {
+  font-family: var(--font-display), Impact, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: clamp(1.5rem, min(4.5vw, 6vh), 3rem);
+  color: var(--text);
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.badgeLarge {
+  padding: clamp(0.6rem, min(2vw, 2vh), 1.25rem) clamp(1.25rem, 4vw, 2.75rem);
+  text-align: center;
+}
+
+.badgeLarge .badgeCounty {
+  font-size: clamp(2rem, min(7vw, 6.5vh), 5rem);
+  text-wrap: balance;
+}
+
+.badgeLarge .badgeState {
+  font-size: clamp(0.7rem, 1.6vw, 1.05rem);
+  margin-top: 0.5rem;
+}
+
+.badgeState {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: clamp(0.65rem, 1.5vw, 0.95rem);
+  color: var(--muted);
+  margin-top: 0.3rem;
+}
+
+.kicker {
+  text-wrap: balance;
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-size: clamp(0.85rem, 2vw, 1.25rem);
+}
+
+.heading {
+  font-family: var(--font-display), Impact, sans-serif;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  font-size: clamp(1.75rem, min(8vw, 6.5vh), 6rem);
+}
+
+/* Countdown */
+.countdown {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.unitWrap {
+  display: flex;
+  align-items: flex-start;
+}
+
+.unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 1.15em;
+  font-size: clamp(3rem, min(15vw, 15vh), 12rem);
+}
+
+.digits {
+  font-family: var(--font-display), Impact, sans-serif;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+
+.colon {
+  font-family: var(--font-display), Impact, sans-serif;
+  font-size: clamp(3rem, min(15vw, 15vh), 12rem);
+  line-height: 1;
+  color: var(--clay);
+  padding: 0 0.1em;
+  animation: blink 1s steps(2, start) infinite;
+}
+
+@keyframes blink {
+  to {
+    opacity: 0.15;
+  }
+}
+
+.unitLabel {
+  font-size: clamp(0.7rem, 1.4vw, 1rem);
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 0.3rem;
+}
+
+.status {
+  text-wrap: balance;
+  color: var(--muted);
+  font-size: clamp(0.9rem, 2vw, 1.25rem);
+  max-width: 40rem;
+}
+
+/* The napping beaver: inline on phones, tucked in the bottom-right corner on desktop. */
+@media (min-width: 900px) {
+  .beaverSpot {
+    position: fixed;
+    right: clamp(1rem, 2.5vw, 2.5rem);
+    bottom: 0.75rem;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .beaverSpot svg {
+    width: min(27vw, 40vh, 28rem);
+  }
+
+  /* The sleeping beaver can be poked. */
+  .beaverSpot button {
+    pointer-events: auto;
+  }
+}
+
+/* "Did you know?" facts, in the center column under the status. */
+.trivia {
+  width: min(100%, 42rem);
+  margin-top: clamp(0.5rem, 3vh, 2.5rem);
+}
+
+.triviaKicker {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: clamp(0.7rem, 1.6vh, 0.85rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.triviaFact {
+  /* Room for three lines, so the layout doesn't jump between short and long facts. */
+  min-height: calc(3 * 1.4em);
+  margin-top: 0.35rem;
+  font-size: clamp(0.9rem, min(1.5vw, 2.3vh), 1.15rem);
+  line-height: 1.4;
+  text-wrap: balance;
+  animation: factIn 0.6s ease-out;
+}
+
+/* Under the label; shrinks until the next fact. */
+.triviaTimer {
+  display: block;
+  width: 5rem;
+  height: 2px;
+  margin: 0.3rem auto 0;
+  border-radius: 1px;
+  background: var(--sage);
+  opacity: 0.7;
+  animation: factTimer linear forwards;
+}
+
+@keyframes factIn {
+  from {
+    opacity: 0;
+    transform: translateY(0.4rem);
+  }
+}
+
+@keyframes factTimer {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .triviaFact,
+  .triviaTimer {
+    animation: none;
+  }
+}
+
+/* Checking status */
+.statusBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(0.4rem, 1.2vh, 0.9rem);
+  margin-top: clamp(0.25rem, 2.5vh, 2.5rem);
+}
+
+.statusMain {
+  font-family: var(--font-display), Impact, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  font-size: clamp(2.25rem, min(7vw, 8vh), 5.5rem);
+  text-wrap: balance;
+  color: var(--text);
+}
+
+.statusSub {
+  font-weight: 700;
+  font-size: clamp(1.15rem, min(3vw, 4vh), 2rem);
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+
+.nextCheck {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: clamp(0.25rem, 2.5vh, 2.5rem);
+  color: var(--muted);
+  font-size: clamp(0.85rem, 1.6vw, 1rem);
+  font-variant-numeric: tabular-nums;
+}
+
+.checkCount {
+  opacity: 0.7;
+}
+
+.ring {
+  width: 1.4em;
+  height: 1.4em;
+  transform: rotate(-90deg);
+}
+
+.ringTrack {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.12);
+  stroke-width: 3;
+}
+
+.ringBar {
+  fill: none;
+  stroke: var(--sage);
+  stroke-width: 3;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.25s linear;
+}
+
+.ringChecking .ringBar {
+  stroke: var(--accent);
+}
+
+.ringChecking {
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(-90deg);
+  }
+  to {
+    transform: rotate(270deg);
+  }
+}
+
+/* About button (top center) and its dialog */
+.aboutButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: 0.35em 0.9em 0.35em 0.7em;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.aboutButton:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.aboutButton:focus-visible,
+.aboutClose:focus-visible {
+  outline: none;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.aboutButton svg,
+.aboutClose svg {
+  width: 1.2em;
+  height: 1.2em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+/* On narrow phones, just the icon. */
+@media (max-width: 420px) {
+  .aboutButton {
+    padding: 0.35em;
+  }
+
+  .aboutLabel {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+}
+
+.aboutDialog {
+  /* Centered; the page's margin reset would otherwise pin it top-left. */
+  margin: auto;
+  overflow: hidden;
+  width: min(100% - 2rem, 38rem);
+  max-height: min(100dvh - 2rem, 48rem);
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1rem;
+  background: #12201c;
+  color: var(--text);
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.6);
+  /* The top bar is uppercase and spaced out; the dialog reads as normal text. */
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
+  text-align: left;
+}
+
+/* Header on top, body scrolling below it, hint over the bottom edge. */
+.aboutDialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.aboutHead {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem clamp(1.25rem, 4vw, 2rem) 0.9rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.aboutMore {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 2.5rem 0 0.75rem;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  /* Fades the text above out, so it's clear the content continues. */
+  background: linear-gradient(transparent, #12201c 70%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+
+.aboutMoreOn {
+  opacity: 1;
+}
+
+.aboutDialog::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.aboutPanel {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 1.1rem clamp(1.25rem, 4vw, 2rem) 1.75rem;
+  line-height: 1.55;
+}
+
+.aboutPanel p {
+  color: rgba(246, 241, 228, 0.88);
+}
+
+.aboutPanel p + p,
+.aboutPanel h3 + p {
+  margin-top: 0.4rem;
+}
+
+.aboutPanel .aboutNote {
+  margin-top: 1.4rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.aboutPanel h3 {
+  margin-top: 1.4rem;
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.aboutPanel a {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.aboutTitle {
+  font-family: var(--font-display), Impact, sans-serif;
+  font-weight: 400;
+  font-size: clamp(1.75rem, 5vw, 2.25rem);
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.aboutClose {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.6rem;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.aboutClose:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Results found */
+.found {
+  animation: flash 1s steps(1, end) infinite;
+}
+
+@keyframes flash {
+  0% {
+    background: #e2603b;
+  }
+  50% {
+    background: #0f7a62;
+  }
+}
+
+.found .clock {
+  color: var(--text);
+}
+
+.found .liveDot {
+  background: var(--text);
+}
+
+.found .badgeState {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.foundContent {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(0.75rem, 3vh, 2.5rem);
+  padding: 1.5rem 1rem;
+  text-align: center;
+}
+
+.foundTitle {
+  font-family: var(--font-display), Impact, sans-serif;
+  font-weight: 400;
+  text-transform: uppercase;
+  line-height: 0.95;
+  font-size: clamp(3rem, min(15vw, 15vh), 13rem);
+  color: var(--text);
+  text-shadow: 0 0.04em 0.12em rgba(0, 0, 0, 0.35);
+  animation: throb 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes throb {
+  to {
+    transform: scale(1.06);
+  }
+}
+
+.foundLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: min(100%, 48rem);
+}
+
+.resultButton {
+  display: block;
+  font: inherit;
+  border: none;
+  cursor: pointer;
+  padding: clamp(1rem, 2.5vw, 1.5rem) 2rem;
+  border-radius: 1rem;
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 800;
+  font-size: clamp(1.1rem, 3vw, 1.8rem);
+  text-decoration: none;
+  box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.4);
+  transition: transform 0.15s;
+}
+
+.resultButton:hover {
+  transform: translateY(-3px) scale(1.02);
+}
+
+.confetti {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.confetti span {
+  position: absolute;
+  top: -5vh;
+  width: 0.7rem;
+  height: 1.3rem;
+  border-radius: 2px;
+  animation-name: fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(110vh) rotate(720deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glowA,
+  .glowB,
+  .liveDot,
+  .colon,
+  .foundTitle,
+  .confetti span,
+  .ringChecking {
+    animation: none;
+  }
+
+  .confetti {
+    display: none;
+  }
+
+  .found {
+    animation: none;
+    background: #0f7a62;
+  }
+}
+
+.ballots {
+  font-weight: 800;
+  font-size: clamp(1.25rem, 3.5vw, 2.25rem);
+  letter-spacing: 0.05em;
+  color: var(--text);
+}
+
+.viewButton {
+  display: inline-flex;
+  align-items: center;
+  /* A gentle pulse so it's clear what to do next. */
+  animation: nudge 1.6s ease-in-out infinite;
+}
+
+.viewButton:hover {
+  animation: none;
+}
+
+.viewButton:focus-visible {
+  outline: 3px solid var(--text);
+  outline-offset: 4px;
+}
+
+@keyframes nudge {
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0.5rem 2.5rem rgba(244, 185, 66, 0.55);
+  }
+}
+
+/* Results dashboard. Everything on the board is sized in em so the whole board
+   can be scaled to fit the screen (see RaceBoard). */
+.board {
+  position: relative;
+  padding: 0.25em clamp(1rem, 2.5vw, 2.5rem) 1em;
+}
+
+.dashHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.5em 2em;
+  margin-bottom: 1em;
+}
+
+.dashKicker {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.85em;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+.dashTitle {
+  font-family: var(--font-display), Impact, sans-serif;
+  font-weight: 400;
+  text-transform: uppercase;
+  line-height: 1;
+  font-size: 2.4em;
+  margin-top: 0.15em;
+}
+
+.dashLinks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.buttonArrow {
+  margin-left: 0.4em;
+}
+
+/* Line icons inside buttons, sized to the button text. */
+.buttonIcon {
+  width: 1.15em;
+  height: 1.15em;
+  margin-right: 0.45em;
+  vertical-align: -0.2em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Switches the board between fitting on one screen and larger, scrolling text.
+   Sized in rem, not em, so it stays big and high-contrast even when the board
+   shrinks to fit: it's the button people with low vision need to find. */
+.sizeToggle {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.55rem 1.1rem;
+  border-radius: 0.7rem;
+  border: 2px solid var(--text);
+  background: var(--text);
+  color: #10201b;
+  font: inherit;
+  font-weight: 800;
+  font-size: clamp(1.05rem, 1.25vw, 1.35rem);
+  line-height: 1.1;
+  cursor: pointer;
+  box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.35);
+  transition:
+    transform 0.15s,
+    background 0.2s;
+}
+
+.sizeToggle .buttonIcon {
+  width: 1.35em;
+  height: 1.35em;
+  stroke-width: 2.4;
+}
+
+.sizeToggle:hover {
+  background: #ffffff;
+  transform: translateY(-3px) scale(1.02);
+}
+
+/* Square zoom out / in buttons, shown next to "Fit to screen". */
+.zoomButton {
+  justify-content: center;
+  min-width: 2.75rem;
+  padding-inline: 0.6rem;
+}
+
+.zoomButton .buttonIcon {
+  margin-right: 0;
+}
+
+.sizeToggle:disabled {
+  background: var(--text);
+  opacity: 0.4;
+  cursor: default;
+  transform: none;
+}
+
+.sizeToggle:focus-visible {
+  outline: none;
+}
+
+/* The board's buttons share one large size (see .sizeToggle). */
+.dashLinks .resultButton {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.55rem 1.1rem;
+  border: 2px solid var(--accent);
+  border-radius: 0.7rem;
+  font-size: clamp(1.05rem, 1.25vw, 1.35rem);
+  line-height: 1.1;
+  box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.35);
+}
+
+.dashLinks .resultButton .buttonIcon {
+  width: 1.35em;
+  height: 1.35em;
+  stroke-width: 2.4;
+}
+
+.raceFlow {
+  /* Room for a group title above a card. */
+  --title-h: 1.75em;
+  column-width: 17em;
+  column-gap: 0.9em;
+  /* Every column starts below a title-high strip, whether or not a title
+     lands at the top of it, so the first cards in each column line up. */
+  padding-top: var(--title-h);
+}
+
+.raceCard {
+  position: relative;
+  break-inside: avoid;
+}
+
+/* A group's first card, with its title drawn in the gap above it. The gap is a
+   margin, which browsers drop when the card starts a new column, so there the
+   title sits in the strip at the top instead. The title lives inside the card
+   (so they always land in the same column) and is shifted up with a transform,
+   which column layout doesn't split. */
+.groupStart {
+  /* The title, plus extra room to separate it from the card above. */
+  margin-top: calc(var(--title-h) + 0.8em);
+}
+
+.raceFlow > .groupStart:first-child {
+  margin-top: 0;
+}
+
+.groupTitle {
+  /* Takes no room in the card; moved up past the card's padding and border.
+     In the title's own em (0.8 of the card's): padding 0.75/0.8, border 0.2/0.8,
+     gap 0.45/0.8, plus one line. */
+  height: 0;
+  transform: translate(calc(-0.9em / 0.8 - 1px), calc(-1 * ((0.75em + 0.2em + 0.45em) / 0.8 + 1.2em)));
+  font-weight: 800;
+  font-size: 0.8em;
+  line-height: 1.2;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--group, var(--accent));
+}
+
+.raceCard {
+  margin-bottom: 0.9em;
+  padding: 0.75em 0.9em;
+  border-radius: 0.75em;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 0.2em solid var(--group, var(--sage));
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.raceTitle {
+  font-size: 0.85em;
+  font-weight: 800;
+  line-height: 1.25;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.raceMeta {
+  color: var(--muted);
+  font-size: 0.75em;
+  margin: 0.2em 0 0.6em;
+}
+
+.raceError {
+  color: var(--accent);
+  font-size: 0.85em;
+}
+
+.candidates {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45em;
+}
+
+.candidate {
+  font-size: 0.95em;
+}
+
+.candidateRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75em;
+}
+
+.candidateName {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.candidateVotes {
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.candidatePct {
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.85em;
+  margin-left: 0.3em;
+}
+
+.party {
+  display: inline-block;
+  margin-right: 0.4em;
+  padding: 0.05em 0.35em;
+  border-radius: 0.3em;
+  background: rgba(255, 255, 255, 0.12);
+  font-size: 0.7em;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  vertical-align: 0.1em;
+}
+
+.bar {
+  height: 0.35em;
+  margin-top: 0.25em;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--sage);
+  transition: width 0.6s ease;
+}
+
+.leading .bar span {
+  background: var(--accent);
+}
+
+.leading .candidateName::after {
+  /* A non-breaking space keeps the check on the same line as the last word. */
+  content: '\00a0✓';
+  color: var(--accent);
+}
+
+.writeIn {
+  color: var(--muted);
+  font-size: 0.85em;
+}
+
+.writeIn .candidateVotes {
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .viewButton,
+  .bar span {
+    animation: none;
+    transition: none;
+  }
+}
