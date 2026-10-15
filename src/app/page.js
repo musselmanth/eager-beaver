@@ -38,7 +38,7 @@ const BEAVER_STOW = { reading: 'stowing', gnawing: 'stowingBranch', knitting: 's
 const BEAVER_STOW_MS = 1300;
 
 // ?demo=sample shows the races from the county's 2024 general election-night report.
-const SAMPLE_REPORT = { href: '/results-sample.pdf', text: '2024 General Election Results UNOFFICIAL (sample)' };
+const SAMPLE_REPORT = { href: `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/results-sample.pdf`, text: '2024 General Election Results UNOFFICIAL (sample)' };
 
 // Races to show: local races and the state legislature, grouped in this order.
 // Federal, statewide (including statewide ballot initiatives), party precinct and
