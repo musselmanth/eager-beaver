@@ -560,7 +560,10 @@ export default function ResultsPage() {
 
         // The county posts an empty report before there are votes in it, so read
         // each report and only count it once it shows ballots cast.
-        const reports = (await Promise.all(data.reports.map(async (r) => ({ ...r, ...(await read(r)) })))).filter((r) =>
+        // A report we couldn't download or read counts as unreadable for this check
+        // (and is retried next time) rather than failing the whole check.
+        const unread = { hasText: false, ballotsCast: null };
+        const reports = (await Promise.all(data.reports.map(async (r) => ({ ...r, ...(await read(r).catch(() => unread)) })))).filter((r) =>
           r.hasText ? election.test(r.election ?? '') : scanLinkMatches(r.text),
         );
         const counted = reports.filter((r) => r.ballotsCast > 0);

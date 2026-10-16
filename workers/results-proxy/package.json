@@ -1,7 +1,4 @@
 {
   "name": "albany-results-proxy",
-  "private": true,
-  "dependencies": {
-    "unpdf": "^1.8.1"
-  }
+  "private": true
 }
