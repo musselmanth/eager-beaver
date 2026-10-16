@@ -9,7 +9,7 @@ import { readReport } from './readReport';
 
 // URL of the Cloudflare Worker in workers/results-proxy/worker.js. The county site
 // doesn't send CORS headers, so the browser can't read it directly.
-const PROXY_URL = 'https://albany-results-proxy.nicojesse93.workers.dev';
+const PROXY_URL = 'https://albany-results-proxy.tmusselman.workers.dev/';
 
 const CLERK_URL = 'https://www.albanycountywy.gov/176/Results-of-Election';
 const ELECTION_DAY = Date.parse('2026-11-03T00:00:00-07:00');
