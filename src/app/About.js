@@ -5,6 +5,7 @@ import styles from './page.module.css';
 export default function About({ clerkUrl }) {
   const dialog = useRef(null);
   const body = useRef(null);
+  const tip = useRef(null);
   // Whether there's more to read below, for the "scroll for more" hint
   // (some browsers hide scrollbars until you scroll).
   const [more, setMore] = useState(false);
@@ -73,12 +74,46 @@ export default function About({ clerkUrl }) {
 
           <h3>Who made it</h3>
           <p>Tom Musselman, a Laramie local.</p>
+          <button type="button" className={styles.tipButton} onClick={() => tip.current?.showModal()} aria-haspopup="dialog">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 8h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8zM17 9.5h1.5a2.5 2.5 0 0 1 0 5H17M7 4.5v1M10.5 3.5v2M14 4.5v1" />
+            </svg>
+            Tip
+          </button>
 
           <p className={styles.aboutNote}>Not an official county website. And yes, you can poke the beaver.</p>
         </div>
 
         <div className={`${styles.aboutMore} ${more ? styles.aboutMoreOn : ''}`} aria-hidden="true">
           Scroll for more ↓
+        </div>
+      </dialog>
+
+      {/* Opens on top of the About dialog. */}
+      <dialog
+        ref={tip}
+        className={styles.aboutDialog}
+        aria-labelledby="tip-title"
+        onClick={(e) => e.target === tip.current && tip.current.close()}
+      >
+        <div className={styles.aboutHead}>
+          <h2 id="tip-title" className={styles.aboutTitle}>
+            Leave a tip
+          </h2>
+          <button type="button" className={styles.aboutClose} onClick={() => tip.current?.close()} aria-label="Close">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 6l12 12M18 6 6 18" />
+            </svg>
+          </button>
+        </div>
+        <div className={styles.tipBody}>
+          {/* Ko-fi's tip panel. Lazy, so it only loads once this dialog is opened. */}
+          <iframe
+            className={styles.tipFrame}
+            src="https://ko-fi.com/tmusselman/?hidefeed=true&widget=true&embed=true"
+            title="Tip Tom on Ko-fi"
+            loading="lazy"
+          />
         </div>
       </dialog>
     </>

@@ -562,6 +562,59 @@
   margin-top: 0.4rem;
 }
 
+.tipButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 0.7rem;
+  padding: 0.45rem 1rem 0.45rem 0.8rem;
+  border: 1px solid rgba(244, 185, 66, 0.45);
+  border-radius: 999px;
+  background: #0b1614;
+  color: var(--accent);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.tipButton:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.tipButton:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.tipButton svg {
+  width: 1.15rem;
+  height: 1.15rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tipBody {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.tipFrame {
+  display: block;
+  width: 100%;
+  height: 40rem;
+  border: none;
+  border-radius: 0.75rem;
+  /* Ko-fi's panel is light; this matches it while it loads. */
+  background: #f9f9f9;
+}
+
 .aboutPanel .aboutNote {
   margin-top: 1.4rem;
   font-size: 0.9rem;
