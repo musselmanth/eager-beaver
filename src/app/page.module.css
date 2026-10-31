@@ -172,18 +172,22 @@
   white-space: nowrap;
 }
 
-.badgeLarge {
-  padding: clamp(0.6rem, min(2vw, 2vh), 1.25rem) clamp(1.25rem, 4vw, 2.75rem);
-  text-align: center;
-}
-
-.badgeLarge .badgeCounty {
-  font-size: clamp(2rem, min(7vw, 6.5vh), 5rem);
+.siteTitle {
+  font-family: var(--font-display), Impact, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  font-size: clamp(2.75rem, min(12vw, 9vh), 7.5rem);
   text-wrap: balance;
+  color: var(--text);
 }
 
-.badgeLarge .badgeState {
-  font-size: clamp(0.7rem, 1.6vw, 1.05rem);
+.siteSubtitle {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: clamp(0.8rem, 2vw, 1.25rem);
+  color: var(--muted);
   margin-top: 0.5rem;
 }
 

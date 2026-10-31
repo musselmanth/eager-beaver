@@ -350,9 +350,9 @@ function RaceBoard({ results, groups, asOf, pdfLinks }) {
   );
 }
 
-function CountyBadge({ title = 'Albany County', subtitle = 'Wyoming · General Election 2026', large = false }) {
+function CountyBadge({ title = 'Albany County', subtitle = 'Wyoming · General Election 2026' }) {
   return (
-    <div className={`${styles.badge} ${large ? styles.badgeLarge : ''}`}>
+    <div className={styles.badge}>
       <span className={styles.badgeCounty}>{title}</span>
       <span className={styles.badgeState}>
         {/* Keep each part on one line so narrow screens break at the dot. */}
@@ -909,7 +909,15 @@ export default function ResultsPage() {
       <div className={styles.glowB} aria-hidden="true" />
       {header}
       <section className={styles.content}>
-        <CountyBadge title="Local Election Results" subtitle="Albany County, Wyoming · General Election 2026" large />
+        <div>
+          <p className={styles.siteTitle}>
+            <span className={styles.nowrap}>Albany County</span>{' '}
+            <span className={styles.nowrap}>Election Results</span>
+          </p>
+          <p className={styles.siteSubtitle}>
+            <span className={styles.nowrap}>Wyoming</span> · <span className={styles.nowrap}>General Election 2026</span>
+          </p>
+        </div>
         <p className={styles.kicker}>{kicker}</p>
         {heading && <h1 className={styles.heading}>{heading}</h1>}
         {body}
