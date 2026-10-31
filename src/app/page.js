@@ -367,101 +367,6 @@ function CountyBadge({ title = 'Albany County', subtitle = 'Wyoming · General E
   );
 }
 
-// The results sound is synthesized so there's no sound file to host.
-
-// Sets up a master volume and returns a function that plays one decaying sine note.
-function synth(ctx, volume) {
-  const t0 = ctx.currentTime + 0.05;
-  const master = ctx.createGain();
-  master.gain.value = volume;
-  // Limit loud stacked chords so they don't distort.
-  const limiter = ctx.createDynamicsCompressor();
-  limiter.threshold.value = -6;
-  limiter.ratio.value = 12;
-  master.connect(limiter).connect(ctx.destination);
-  return ({ freq, start, length, peak = 1, attack = 0.01 }) => {
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.frequency.value = freq;
-    gain.gain.setValueAtTime(0, t0 + start);
-    gain.gain.linearRampToValueAtTime(peak, t0 + start + attack);
-    gain.gain.exponentialRampToValueAtTime(0.001, t0 + start + length);
-    osc.connect(gain).connect(master);
-    osc.start(t0 + start);
-    osc.stop(t0 + start + length + 0.05);
-  };
-}
-
-// MIDI note number → Hz (60 = middle C).
-const midi = (n) => 440 * 2 ** ((n - 69) / 12);
-
-// A marimba-like voice: a sine that decays faster the higher it is, a quiet
-// 4th harmonic (marimba bars are tuned to it), and a short mallet click.
-function marimba(note) {
-  return (n, start, peak = 0.6) => {
-    const freq = midi(n);
-    const length = Math.min(1.6, 120 / freq);
-    note({ freq, start, length, peak, attack: 0.004 });
-    note({ freq: freq * 4, start, length: length / 5, peak: peak * 0.15, attack: 0.002 });
-    note({ freq: freq * 10, start, length: 0.03, peak: peak * 0.05, attack: 0.001 });
-  };
-}
-
-// Plays a short marimba tune: a melody over a bass line, a rolled C major
-// chord to finish, and glockenspiel sparkles on top. Times are in 16th notes;
-// notes are MIDI numbers.
-function playTune(ctx, { step, melody, bass, sparkles }) {
-  const note = synth(ctx, 0.4);
-  const mallet = marimba(note);
-  melody.forEach(([t, n, v = 0.6]) => mallet(n, t * step, v));
-  bass.forEach(([t, n]) => mallet(n, t * step, 0.9));
-  sparkles.forEach(([t, n]) => note({ freq: midi(n), start: t * step, length: 0.6, peak: 0.12 }));
-
-  // Roll the final chord: alternate mallets fast, swelling, then one last hit.
-  const rollStart = Math.max(...melody.map(([t]) => t)) + 2;
-  const roll = [72, 79, 76, 84];
-  for (let i = 0; i < 12; i++) {
-    const swell = 0.25 + 0.35 * Math.sin((i / 12) * Math.PI);
-    mallet(roll[i % roll.length], (rollStart + i * 0.5) * step, swell);
-  }
-  const end = (rollStart + 6) * step;
-  [36, 48, 72, 76, 79, 84].forEach((n) => mallet(n, end, n < 60 ? 1 : 0.7));
-  // Shimmer over the last chord.
-  [96, 100, 103, 108].forEach((n, i) => note({ freq: midi(n), start: end + i * 0.06, length: 1.8, peak: 0.1 }));
-}
-
-// The tune that plays when results come in: a syncopated 3-3-2 island groove.
-// It runs about 10 seconds, so the beaver on the "Results are in!" screen has
-// something to dance to. Each line below is one bar (8 sixteenth notes).
-const RESULT_TUNE = {
-  step: 0.085,
-  melody: [
-    [0, 72], [3, 76], [6, 79, 0.75], // C
-    [8, 77], [11, 76], [14, 74], // F, G
-    [16, 72], [19, 76], [22, 79, 0.75], // C
-    [24, 84, 0.9], [27, 83], [30, 79], // G
-    [32, 76], [34, 79], [35, 81], [38, 79], // C
-    [40, 77], [43, 81], [46, 84, 0.8], // F
-    [48, 83], [50, 81], [51, 79], [54, 74], // G
-    [56, 76], [59, 72], [62, 79, 0.75], // C
-    [64, 81], [67, 84], [70, 88, 0.85], // Am
-    [72, 86], [75, 84], [78, 81], // F
-    [80, 83], [82, 86], [83, 83], [86, 79], // G
-    [88, 74], [90, 77], [91, 79], [94, 83], // G, walking up
-    [96, 84, 0.9], // C, then the rolled final chord
-  ],
-  bass: [
-    [0, 48], [3, 55], [6, 48],
-    [8, 41], [11, 48], [14, 43],
-    [16, 48], [19, 55], [22, 43],
-    ...[[24, 43], [32, 48], [40, 41], [48, 43], [56, 48], [64, 45], [72, 41], [80, 43]].flatMap(([t, n]) => [
-      [t, n], [t + 3, n + 7], [t + 6, n],
-    ]),
-    [88, 43], [91, 47], [94, 50],
-  ],
-  sparkles: [[6, 91], [14, 98], [22, 103], [46, 96], [62, 98], [70, 100], [86, 103], [94, 98], [94.5, 103]],
-};
-
 // Deterministic confetti so render stays pure.
 const CONFETTI = Array.from({ length: 60 }, (_, i) => ({
   left: (i * 37) % 100,
@@ -480,12 +385,11 @@ export default function ResultsPage() {
   const [lastCheck, setLastCheck] = useState(null); // { at, ok, error }
   const [checkCount, setCheckCount] = useState(0);
   const [results, setResults] = useState(null);
-  // When results arrived while the page was open (for the fanfare and title flash).
+  // When results arrived while the page was open (for the title flash).
   const [arrivedLiveAt, setArrivedLiveAt] = useState(0);
   // Whether this browser has clicked through to the results.
   const [viewed, setViewed] = useState(false);
   const [canFullscreen, setCanFullscreen] = useState(false);
-  const audioRef = useRef(null);
   const [fullscreen, setFullscreen] = useState(false);
 
   const offsetRef = useRef(0);
@@ -575,7 +479,7 @@ export default function ResultsPage() {
 
         if (best || changed) {
           foundRef.current = true;
-          // Only play the fanfare and flash the title if we were here when the results arrived.
+          // Only flash the title if we were here when the results arrived.
           if (waitedRef.current || sample) setArrivedLiveAt(clock());
           setResults({
             links: reports.map(({ href, text }) => ({ href, text })),
@@ -638,7 +542,7 @@ export default function ResultsPage() {
   }, []);
 
   // Flash the tab title for 30 seconds when results come in or update.
-  // Only for results that arrived while the page was open (the same ones that get the fanfare).
+  // Only for results that arrived while the page was open.
   const resultsKey = results && arrivedLiveAt ? `${results.at}|${results.asOf}` : null;
   useEffect(() => {
     if (!resultsKey) return;
@@ -672,32 +576,6 @@ export default function ResultsPage() {
       document.removeEventListener('fullscreenchange', sync);
     };
   }, []);
-
-  // Browsers only allow audio after someone interacts with the page, so unlock it
-  // on the first tap or key press (e.g. hitting full screen on the party TV).
-  const unlockAudio = () => {
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContext) return null;
-    audioRef.current ??= new AudioContext();
-    audioRef.current.resume().catch(() => {});
-    return audioRef.current;
-  };
-
-  useEffect(() => {
-    const unlock = () => unlockAudio();
-    window.addEventListener('pointerdown', unlock, { once: true });
-    window.addEventListener('keydown', unlock, { once: true });
-    return () => {
-      window.removeEventListener('pointerdown', unlock);
-      window.removeEventListener('keydown', unlock);
-    };
-  }, []);
-
-  // Play the fanfare when results arrive while the page is open.
-  useEffect(() => {
-    const ctx = audioRef.current;
-    if (arrivedLiveAt && ctx?.state === 'running') playTune(ctx, RESULT_TUNE);
-  }, [arrivedLiveAt]);
 
   const toggleFullscreen = () => {
     if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
