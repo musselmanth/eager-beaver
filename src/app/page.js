@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import About from './About';
 import Beaver, { FAKEOUT_CHECKS } from './Beaver';
 import Trivia from './Trivia';
@@ -298,10 +298,7 @@ function RaceBoard({ results, groups, asOf, pdfLinks }) {
             {asOf && ` · as of ${asOf}`}
             {results.ballots > 0 && ` · ${results.ballots.toLocaleString('en-US')} ballots counted`}
           </p>
-          <h1 className={styles.dashTitle}>
-            <span className={styles.nowrap}>Local Election Results</span> ·{' '}
-            <span className={styles.nowrap}>Albany County</span>
-          </h1>
+          <SiteTitle heading />
         </div>
         <div className={styles.dashLinks}>
           {(canEnlarge || !fitAll) && (
@@ -350,19 +347,18 @@ function RaceBoard({ results, groups, asOf, pdfLinks }) {
   );
 }
 
-function CountyBadge({ title = 'Albany County', subtitle = 'Wyoming · General Election 2026' }) {
+// The page's title, shared by the waiting, "Results are in!" and results screens.
+function SiteTitle({ heading = false }) {
+  const Title = heading ? 'h1' : 'p';
   return (
-    <div className={styles.badge}>
-      <span className={styles.badgeCounty}>{title}</span>
-      <span className={styles.badgeState}>
-        {/* Keep each part on one line so narrow screens break at the dot. */}
-        {subtitle.split(' · ').map((part, i) => (
-          <Fragment key={part}>
-            {i > 0 && ' · '}
-            <span className={styles.nowrap}>{part}</span>
-          </Fragment>
-        ))}
-      </span>
+    <div>
+      <Title className={styles.siteTitle}>
+        <span className={styles.nowrap}>Albany County</span>{' '}
+        <span className={styles.nowrap}>Election Results</span>
+      </Title>
+      <p className={styles.siteSubtitle}>
+        <span className={styles.nowrap}>Wyoming</span> · <span className={styles.nowrap}>General Election 2026</span>
+      </p>
     </div>
   );
 }
@@ -658,7 +654,7 @@ export default function ResultsPage() {
           </div>
           {header}
           <div className={styles.foundContent}>
-            <CountyBadge />
+            <SiteTitle />
             <p className={styles.kicker}>Posted {mtTime(results.at, false)} MT</p>
             <h1 className={styles.foundTitle}>Results are in!</h1>
             {results.ballots > 0 && (
@@ -787,15 +783,7 @@ export default function ResultsPage() {
       <div className={styles.glowB} aria-hidden="true" />
       {header}
       <section className={styles.content}>
-        <div>
-          <p className={styles.siteTitle}>
-            <span className={styles.nowrap}>Albany County</span>{' '}
-            <span className={styles.nowrap}>Election Results</span>
-          </p>
-          <p className={styles.siteSubtitle}>
-            <span className={styles.nowrap}>Wyoming</span> · <span className={styles.nowrap}>General Election 2026</span>
-          </p>
-        </div>
+        <SiteTitle />
         <p className={styles.kicker}>{kicker}</p>
         {heading && <h1 className={styles.heading}>{heading}</h1>}
         {body}

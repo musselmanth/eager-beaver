@@ -148,26 +148,6 @@
   text-align: center;
 }
 
-.badge {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  line-height: 1.05;
-  padding: clamp(0.6rem, 1.5vw, 0.9rem) clamp(1.25rem, 3vw, 2rem);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(8px);
-}
-
-.badgeCounty {
-  font-family: var(--font-display), Impact, sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  font-size: clamp(1.5rem, min(4.5vw, 6vh), 3rem);
-  color: var(--text);
-}
-
 .nowrap {
   white-space: nowrap;
 }
@@ -189,15 +169,6 @@
   font-size: clamp(0.8rem, 2vw, 1.25rem);
   color: var(--muted);
   margin-top: 0.5rem;
-}
-
-.badgeState {
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  font-size: clamp(0.65rem, 1.5vw, 0.95rem);
-  color: var(--muted);
-  margin-top: 0.3rem;
 }
 
 .kicker {
@@ -696,7 +667,7 @@
   background: var(--text);
 }
 
-.found .badgeState {
+.found .siteSubtitle {
   color: rgba(255, 255, 255, 0.85);
 }
 
@@ -857,13 +828,15 @@
   font-variant-numeric: tabular-nums;
 }
 
-.dashTitle {
-  font-family: var(--font-display), Impact, sans-serif;
-  font-weight: 400;
-  text-transform: uppercase;
-  line-height: 1;
+/* The site title, sized to the board (which scales its text to fit). */
+.dashHead .siteTitle {
   font-size: 2.4em;
   margin-top: 0.15em;
+}
+
+.dashHead .siteSubtitle {
+  font-size: 0.85em;
+  margin-top: 0.4em;
 }
 
 .dashLinks {
