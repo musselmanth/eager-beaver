@@ -32,7 +32,7 @@ const TWIDDLING_POKES = [
 
 const KNITTING_POKES = [
   'Shh! I’m counting stitches.',
-  'Knit one, gnaw two…',
+  'Knit one, purl two… wait, where was I?',
   'It’s an election night scarf.',
   'Laramie winters are no joke.',
 ];
