@@ -470,10 +470,18 @@
   stroke-linecap: round;
 }
 
-/* On narrow phones, just the icon. */
+/* On narrow phones, just the icon, larger and in the accent color so it stands out. */
 @media (max-width: 420px) {
   .aboutButton {
-    padding: 0.35em;
+    padding: 0.5em;
+    border-color: var(--accent);
+    background: rgba(244, 185, 66, 0.15);
+    color: var(--accent);
+  }
+
+  .aboutButton svg {
+    width: 1.75em;
+    height: 1.75em;
   }
 
   .aboutLabel {
