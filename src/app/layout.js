@@ -13,10 +13,21 @@ const inter = Inter({
   display: 'swap',
 });
 
+const title = 'Albany County Election Results';
+const description =
+  'Election night results for the 2026 general election in Albany County, Wyoming, posted as soon as the County Clerk releases them.';
+
+// The share image and icons are the image files next to this one (opengraph-image.png, icon.png, …).
 export const metadata = {
-  title: 'Albany County, WY Results Watch',
-  description: 'Live countdown and results checker for the 2026 general election in Albany County, Wyoming.',
-  robots: { index: false, follow: false },
+  metadataBase: new URL('https://albanyballotbeaver.com'),
+  title,
+  description,
+  openGraph: { title, description, url: '/', siteName: 'Albany Ballot Beaver', type: 'website' },
+  twitter: { card: 'summary_large_image' },
+};
+
+export const viewport = {
+  themeColor: '#0b1614',
 };
 
 export default function RootLayout({ children }) {

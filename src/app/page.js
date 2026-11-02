@@ -542,7 +542,7 @@ export default function ResultsPage() {
   const resultsKey = results && arrivedLiveAt ? `${results.at}|${results.asOf}` : null;
   useEffect(() => {
     if (!resultsKey) return;
-    const title = 'Albany County, WY Results Watch';
+    const title = 'Albany County Election Results';
     let on = false;
     const id = setInterval(() => {
       on = !on;
