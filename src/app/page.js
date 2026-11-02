@@ -351,13 +351,13 @@ function RaceBoard({ results, groups, asOf, pdfLinks }) {
 function SiteTitle({ heading = false }) {
   const Title = heading ? 'h1' : 'p';
   return (
-    <div>
+    <div className={styles.siteHead}>
       <Title className={styles.siteTitle}>
         <span className={styles.nowrap}>Albany County</span>{' '}
         <span className={styles.nowrap}>Election Results</span>
       </Title>
       <p className={styles.siteSubtitle}>
-        <span className={styles.nowrap}>Wyoming</span> · <span className={styles.nowrap}>General Election 2026</span>
+        <span className={styles.nowrap}>Wyoming General Election</span> · <span className={styles.nowrap}>Nov 3, 2026</span>
       </p>
     </div>
   );
@@ -586,11 +586,10 @@ export default function ResultsPage() {
     <header className={styles.topBar}>
       <span className={styles.live}>
         <span className={styles.liveDot} />
-        Election Night 2026
+        <span className={styles.clock}>{mtTime(now)} MT</span>
       </span>
       <About clerkUrl={CLERK_URL} />
       <span className={styles.topRight}>
-        <span className={styles.clock}>{mtTime(now)} MT</span>
         {canFullscreen && (
           <button
             type="button"
@@ -690,7 +689,7 @@ export default function ResultsPage() {
 
   let kicker, heading, body, beaver;
   if (polling) {
-    kicker = 'Polls are closed · Watching for results';
+    kicker = null;
     heading = null;
     const nextIn = Math.max(0, Math.ceil(((nextPingAt ?? now) - now) / 1000));
     // We only get here while there are no results, so every finished check is a sad one.
@@ -746,24 +745,14 @@ export default function ResultsPage() {
       </>
     );
   } else if (now < POLLS_CLOSE) {
-    kicker = 'Election Day · Tuesday, November 3';
-    heading = 'Polls close in';
-    body = (
-      <>
-        <Countdown ms={POLLS_CLOSE - now} />
-        <p className={styles.status}>Polls close at 7:00 PM MT across Albany County</p>
-      </>
-    );
+    kicker = null;
+    heading = 'Polls close at 7 PM';
+    body = <Countdown ms={POLLS_CLOSE - now} />;
     beaver = { mood: 'curled', pollsOpen: true, earlyVoting: now < ELECTION_DAY };
   } else {
     kicker = 'Polls are closed!';
-    heading = 'Checking for results in';
-    body = (
-      <>
-        <Countdown ms={FIRST_PING - now} />
-        <p className={styles.status}>We&apos;ll start checking the Albany County Clerk&apos;s site at 8:00 PM MT</p>
-      </>
-    );
+    heading = 'First check at 8 PM';
+    body = <Countdown ms={FIRST_PING - now} />;
     // Wake up gradually for the first check: stir, then sit up at the laptop
     // (the same early wake-up as every later check), so 8:00 is seamless.
     const untilFirst = FIRST_PING - now;
@@ -784,7 +773,7 @@ export default function ResultsPage() {
       {header}
       <section className={styles.content}>
         <SiteTitle />
-        <p className={styles.kicker}>{kicker}</p>
+        {kicker && <p className={styles.kicker}>{kicker}</p>}
         {heading && <h1 className={styles.heading}>{heading}</h1>}
         {body}
         {/* One beaver across the waiting screens, so it animates between poses instead of being swapped out. */}

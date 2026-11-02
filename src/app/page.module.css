@@ -162,6 +162,11 @@
   color: var(--text);
 }
 
+/* Breathing room between the site title and the countdown or status below it. */
+.content > .siteHead {
+  margin-bottom: clamp(0.25rem, 3vh, 2rem);
+}
+
 .siteSubtitle {
   font-weight: 700;
   text-transform: uppercase;
@@ -239,13 +244,6 @@
   text-transform: uppercase;
   color: var(--muted);
   margin-top: 0.3rem;
-}
-
-.status {
-  text-wrap: balance;
-  color: var(--muted);
-  font-size: clamp(0.9rem, 2vw, 1.25rem);
-  max-width: 40rem;
 }
 
 /* The napping beaver: inline on phones, tucked in the bottom-right corner on desktop. */
