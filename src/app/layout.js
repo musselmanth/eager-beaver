@@ -1,4 +1,5 @@
 import { Anton, Inter } from 'next/font/google';
+import Script from 'next/script';
 
 const anton = Anton({
   subsets: ['latin'],
@@ -35,6 +36,14 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${anton.variable} ${inter.variable}`}>
       <body style={{ margin: 0, background: '#0b1614' }}>
         {children}
+        {/* Google Analytics */}
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-3LE1779WN9" />
+        <Script id="gtag">
+          {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-3LE1779WN9');`}
+        </Script>
       </body>
     </html>
   );
