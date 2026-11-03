@@ -399,8 +399,10 @@ export default function ResultsPage() {
   useEffect(() => {
     // ?demo=sample shows the 2024 sample report right away, without the county site.
     // ?at=2026-11-03T18:59:50-07:00 pretends the page was opened at that time.
+    // ?reported=7 pretends 7 of 11 vote centers have reported.
     const params = new URLSearchParams(window.location.search);
     const sample = params.get('demo') === 'sample';
+    const fakeReported = params.has('reported') ? { reported: Number(params.get('reported')) || 0, total: 11 } : null;
     // Skip the "Results are in!" screen if this browser has already seen the results.
     // The demo always shows it, so it can be tried again and again.
     try {
@@ -494,7 +496,7 @@ export default function ResultsPage() {
           posted: reports.length > 0,
           counted: known.length ? Math.max(...known) : null,
           // { reported, total } vote centers, once the clerk's status table is reset for this election.
-          reporting: data.reporting ?? null,
+          reporting: fakeReported ?? data.reporting ?? null,
         });
       } catch (err) {
         setLastCheck({ at: fetchedAt, ok: false, error: err.name === 'TimeoutError' ? 'Request timed out' : err.message });
