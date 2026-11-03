@@ -41,7 +41,7 @@ const GNAWING_POKES = [
   'Mmf! Busy!',
   'Gotta keep these teeth filed down.',
   'Want a bite? …No? More for me.',
-  'Aspen. A very good year.',
+  'Aspen. Vintage 1996. A very good year.',
 ];
 
 const READING_POKES = {
@@ -88,7 +88,7 @@ const POKES_POLLS_OPEN = [
   { level: 'stir', says: 'Mmm?' },
   { level: 'stir', says: 'Shouldn’t you be voting?' },
   { level: 'peek', says: 'Polls close at 7. Go vote!' },
-  { level: 'peek', says: 'Go vote and let me sleep…' },
+  { level: 'peek', says: 'Let me sleep…' },
   { level: 'grumpy', says: 'Go vote and stop bugging me!!' },
 ];
 
@@ -102,14 +102,13 @@ const LETDOWN = ['…oh. Not yet.', 'Nope. Still waiting.', 'Back to my nap…']
 // What the beaver says while checking, a different line each time.
 const CHECKING = [
   'Anything yet?!',
-  'Is it posted?!',
+  'Are they posted?!',
   'Come on, come on…',
   'Ooh, maybe this time!',
   'Refresh! Refresh!',
   'Results? Results?',
   'Let’s see…',
   'This could be it!',
-  'Eager beaver, reporting for duty!',
   'Not to be an eager beaver, but… results?',
 ];
 
@@ -340,7 +339,7 @@ export default function Beaver({
   next = 'asleep',
 }) {
   const [reaction, setReaction] = useState(null); // { level, says }
-  const pokes = useRef(0);
+  const pokes = useRef({}); // How many times it's been poked, per activity (and per book).
   const timers = useRef([]);
   const clearTimers = () => {
     timers.current.forEach(clearTimeout);
@@ -376,11 +375,10 @@ export default function Beaver({
             : null);
   const onPoke = () => {
     clearTimers();
-    const n = pokes.current++;
-    const settle = () => {
-      setReaction(null);
-      pokes.current = 0;
-    };
+    const key = mood === 'reading' ? BOOKS[book % BOOKS.length] : mood;
+    const n = pokes.current[key] ?? 0;
+    pokes.current[key] = n + 1;
+    const settle = () => setReaction(null);
     if (mood === 'twiddling') {
       setReaction({ level: 'shush', says: TWIDDLING_POKES[n % TWIDDLING_POKES.length] });
       later(POKE_SETTLE_MS, settle);
@@ -403,7 +401,11 @@ export default function Beaver({
     } else {
       const lines = earlyVoting ? POKES_EARLY_VOTING : pollsOpen ? POKES_POLLS_OPEN : POKES;
       setReaction(lines[Math.min(n + 1, lines.length - 1)]);
-      later(POKE_SETTLE_MS, settle);
+      // The grumbling starts over once it settles; the other moods pick up where they left off.
+      later(POKE_SETTLE_MS, () => {
+        settle();
+        pokes.current[key] = 0;
+      });
     }
   };
 

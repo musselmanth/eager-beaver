@@ -68,6 +68,10 @@ export default function About({ clerkUrl }) {
             downloads the results as soon as they&apos;re posted. The county&apos;s PDF is linked so you can double-check
             any number.
           </p>
+          <p>
+            Albany County releases results only after every polling location has reported, so they arrive all at
+            once rather than trickling in. The Clerk estimates they will be available around 9:00&ndash;10:00 PM MST.
+          </p>
 
           <h3>What races are included</h3>
           <p>Every race decided entirely by Albany County voters, except precinct committee races.</p>
