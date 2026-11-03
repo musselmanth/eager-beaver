@@ -1,8 +1,9 @@
 // Cloudflare Worker that watches the Albany County "Results of Election" page for
 // the 2026 general election preliminary results, for the static results page.
 //
-// GET /           → JSON: the matching report links (with a hash of each PDF) and
-//                   when a report first changed from its first-seen version.
+// GET /           → JSON: the matching report links (with a hash of each PDF),
+//                   when a report first changed from its first-seen version, and
+//                   how many vote centers have reported.
 // GET /?pdf=<url> → our cached copy of one of those report PDFs, so the page can
 //                   read it for vote totals without hitting the county site itself.
 //
@@ -36,21 +37,40 @@ const CORS = {
   'Access-Control-Allow-Methods': 'GET, OPTIONS',
 };
 
+// The plain text of an HTML fragment.
+const plain = (html) =>
+  html
+    .replace(/<[^>]+>/g, '')
+    .replace(/&amp;/g, '&')
+    .replace(/&nbsp;|&#160;/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
 function findLinks(html, match) {
   const links = new Map();
   for (const [, attrs, inner] of html.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi)) {
     const href = attrs.match(/href="([^"]+)"/i)?.[1];
-    const text = inner
-      .replace(/<[^>]+>/g, '')
-      .replace(/&amp;/g, '&')
-      .replace(/&nbsp;/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim();
+    const text = plain(inner);
     if (!href || !match(text)) continue;
     const url = new URL(href.replace(/&amp;/g, '&'), CLERK_URL).href;
     if (!links.has(url)) links.set(url, text);
   }
   return [...links].slice(0, MAX_LINKS).map(([href, text]) => ({ href, text }));
+}
+
+// The "Vote Center Reporting Status" table: one row per vote center (plus
+// absentee/mail), each marked YES or NO. Returns { reported, total }, or null if
+// the table isn't there.
+function readReporting(html) {
+  const start = html.search(/Vote Center Reporting Status/i);
+  if (start < 0) return null;
+  const table = html.slice(start).match(/<tbody[^>]*>([\s\S]*?)<\/tbody>/i)?.[1];
+  if (!table) return null;
+  const rows = [...table.matchAll(/<tr\b[\s\S]*?<\/tr>/gi)]
+    .map(([row]) => [...row.matchAll(/<td\b[^>]*>([\s\S]*?)<\/td>/gi)].map(([, cell]) => plain(cell)))
+    .filter((cells) => cells.length >= 2 && cells[0]);
+  if (!rows.length) return null;
+  return { reported: rows.filter((cells) => /^yes/i.test(cells[1])).length, total: rows.length };
 }
 
 async function fetchOk(url) {
@@ -120,11 +140,21 @@ export class ClerkPage extends DurableObject {
         await this.ctx.storage.put('changedAt', changedAt);
       }
 
+      // The table still shows the last election (all YES) until the clerk resets
+      // it, so only pass it on once we've seen a vote center that hasn't reported.
+      const reporting = readReporting(html);
+      let resetSeen = await this.ctx.storage.get('reportingReset');
+      if (!resetSeen && reporting && reporting.reported < reporting.total) {
+        resetSeen = true;
+        await this.ctx.storage.put('reportingReset', true);
+      }
+
       state = {
         at: Date.now(),
         ok: true,
         reports,
         changedAt: changedAt ?? null,
+        reporting: resetSeen ? reporting : null,
       };
     } catch (err) {
       // Cache failures too, so an outage doesn't turn into a retry storm.
@@ -196,6 +226,7 @@ export default {
       ageMs: Date.now() - state.at,
       reports: state.reports ?? [],
       changedAt: state.changedAt ?? null,
+      reporting: state.reporting ?? null,
     };
     return Response.json(body, { headers: { ...CORS, 'Cache-Control': 'no-store' } });
   },

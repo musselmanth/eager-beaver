@@ -488,7 +488,14 @@ export default function ResultsPage() {
         }
         const known = reports.map((r) => r.ballotsCast).filter((b) => b !== null);
         if (!foundRef.current) waitedRef.current = true;
-        setLastCheck({ at: fetchedAt, ok: true, posted: reports.length > 0, counted: known.length ? Math.max(...known) : null });
+        setLastCheck({
+          at: fetchedAt,
+          ok: true,
+          posted: reports.length > 0,
+          counted: known.length ? Math.max(...known) : null,
+          // { reported, total } vote centers, once the clerk's status table is reset for this election.
+          reporting: data.reporting ?? null,
+        });
       } catch (err) {
         setLastCheck({ at: fetchedAt, ok: false, error: err.name === 'TimeoutError' ? 'Request timed out' : err.message });
       } finally {
@@ -736,6 +743,11 @@ export default function ResultsPage() {
         <div className={styles.statusBlock} aria-live="polite">
           <p className={styles.statusMain}>{statusMain}</p>
           {statusSub && <p className={styles.statusSub}>{statusSub}</p>}
+          {lastCheck?.reporting && (
+            <p className={styles.reporting}>
+              {lastCheck.reporting.reported} of {lastCheck.reporting.total} vote centers reported
+            </p>
+          )}
         </div>
         <p className={styles.nextCheck}>
           <PingRing remaining={nextPingAt === null ? 0 : nextPingAt - now} checking={checking} />

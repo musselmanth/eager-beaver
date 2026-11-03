@@ -7,7 +7,6 @@ import styles from './page.module.css';
 // Every eleventh or so is a beaver fact, for our mascot.
 const FACTS = [
   'On September 6, 1870, 69-year-old Louisa Swain of Laramie became the first woman in the U.S. to cast a legal vote in a general election.',
-  'Laramie sits at about 7,165 feet above sea level. That’s higher than Denver’s Mile High by more than 1,800 feet.',
   'Albany County is a presidential bellwether: it has backed the losing candidate only four times, in 1892, 1960, 1976 and 2012.',
   'Laramie is named for Jacques La Ramée, a French-Canadian fur trapper who disappeared in the nearby mountains in the early 1820s.',
   'Laramie’s city council has nine members, three from each of the city’s three wards, serving overlapping four-year terms.',
@@ -41,7 +40,6 @@ const FACTS = [
   'The endangered Wyoming toad is found only in the Laramie Basin. After nearly vanishing in the 1970s, it’s being brought back at Mortenson Lake National Wildlife Refuge.',
   'Beaver teeth are orange because their enamel contains iron, and they never stop growing.',
   'Laramie was the first town in Wyoming to hold a municipal election.',
-  'Ken Sailors, a Laramie High graduate often credited with inventing the jump shot, led UW to the 1943 NCAA basketball championship.',
   'Wyoming school board races are nonpartisan too. A 2025 bill to put party labels on them passed the state Senate but died in the House.',
   'A giant bronze head of Abraham Lincoln, sculpted by UW art professor Robert Russin, watches over I-80 between Laramie and Cheyenne. It was dedicated in 1959.',
   'Albany County covers 4,309 square miles, bigger than Delaware and Rhode Island combined.',
@@ -69,7 +67,6 @@ const FACTS = [
   'Local ballots can include special districts, like conservation, fire and hospital districts, that fund services close to home.',
   'UW’s Geological Museum is home to “Big Al,” a famous Allosaurus that starred in a BBC documentary.',
   'Statewide and legislative results are certified by the State Canvassing Board: the governor, secretary of state, state auditor and state treasurer.',
-  'More Wyoming landmarks are named for trapper Jacques La Ramée than for any other trapper except Jim Bridger.',
   'Write-in votes count! Every race has a line for writing in a name.',
   'UW’s White Hall is 12 stories tall, the second-tallest building in Wyoming.',
   'A beaver’s flat tail is an alarm system and a pantry: it slaps the water to warn of danger and stores fat for winter.',

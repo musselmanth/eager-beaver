@@ -257,7 +257,7 @@
   }
 
   .beaverSpot svg {
-    width: min(27vw, 40vh, 28rem);
+    width: min(33vw, 50vh, 36rem);
   }
 
   /* The sleeping beaver can be poked. */
@@ -349,6 +349,15 @@
   font-size: clamp(1.15rem, min(3vw, 4vh), 2rem);
   font-variant-numeric: tabular-nums;
   color: var(--text);
+}
+
+.reporting {
+  font-weight: 700;
+  font-size: clamp(0.95rem, min(2.4vw, 3vh), 1.35rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
 }
 
 .nextCheck {
