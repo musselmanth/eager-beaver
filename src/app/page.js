@@ -12,7 +12,7 @@ import { readReport } from './readReport';
 const PROXY_URL = 'https://albany-results-proxy.tmusselman.workers.dev/';
 // Bump this when a fix has to reach pages that are already open, then raise
 // MIN_CLIENT_VERSION in the worker once the new build is live (see the README).
-const CLIENT_VERSION = 1;
+const CLIENT_VERSION = 2;
 const VERSION_CHECK_INTERVAL = 5 * 60 * 1000;
 
 const CLERK_URL = 'https://www.albanycountywy.gov/176/Results-of-Election';

@@ -12,6 +12,40 @@ const SUMMARY_ROWS = {
 
 const isNumber = (s) => /^\d[\d,]*$/.test(s);
 const toNumber = (s) => Number(s.replace(/,/g, ''));
+// Labels start near the left margin, and a wrapped label's counts sit about 5
+// points from each of its lines.
+const WRAPPED_COUNT_MIN_X = 100;
+const WRAPPED_ROW_GAP = 8;
+
+// Vote counts sit in columns well right of the labels, so a number inside a
+// race title (e.g. "HOUSE DISTRICT 13") stays part of the label.
+const isCount = (item, lineItems) => isNumber(item.str.trim()) && item.x - lineItems[0].x > 100;
+
+// A label too long for its column wraps onto two lines, with the counts centered
+// between them on a line of their own (e.g. "AGAINST THE COUNTY SALES AND USE" /
+// "TAX"). Put those three back together as one row.
+function joinWrappedRows(lines) {
+  const joined = [];
+  for (let n = 0; n < lines.length; n++) {
+    const [above, counts, below] = [joined.at(-1), lines[n], lines[n + 1]];
+    const isWrapped =
+      above &&
+      below &&
+      counts.items[0].x > WRAPPED_COUNT_MIN_X &&
+      counts.items.every((i) => isNumber(i.str.trim())) &&
+      above.y - counts.y <= WRAPPED_ROW_GAP &&
+      counts.y - below.y <= WRAPPED_ROW_GAP &&
+      !above.items.some((i) => isCount(i, above.items)) &&
+      !below.items.some((i) => isCount(i, below.items));
+    if (isWrapped) {
+      above.items.push(...below.items, ...counts.items);
+      n++;
+    } else {
+      joined.push(counts);
+    }
+  }
+  return joined;
+}
 
 // Group text items into lines (numbers sit a couple of points off their labels).
 function toLines(items) {
@@ -22,22 +56,17 @@ function toLines(items) {
     if (line && line.y - item.y <= 4) line.items.push(item);
     else lines.push({ y: item.y, items: [item] });
   }
-  return lines.map(({ items }) => {
-    items.sort((a, b) => a.x - b.x);
-    // Vote counts sit in columns well right of the labels, so a number inside a
-    // race title (e.g. "HOUSE DISTRICT 13") stays part of the label.
-    const isCount = (i) => isNumber(i.str.trim()) && i.x - items[0].x > 100;
-    return {
-      label: items
-        .filter((i) => !isCount(i))
-        .map((i) => i.str.trim())
-        .join(' ')
-        .replace(/\s+/g, ' ')
-        .trim(),
-      // First number is the TOTAL column; later ones are per-ballot-type breakdowns.
-      numbers: items.filter(isCount).map((i) => toNumber(i.str.trim())),
-    };
-  });
+  for (const line of lines) line.items.sort((a, b) => a.x - b.x);
+  return joinWrappedRows(lines).map(({ items }) => ({
+    label: items
+      .filter((i) => !isCount(i, items))
+      .map((i) => i.str.trim())
+      .join(' ')
+      .replace(/\s+/g, ' ')
+      .trim(),
+    // First number is the TOTAL column; later ones are per-ballot-type breakdowns.
+    numbers: items.filter((i) => isCount(i, items)).map((i) => toNumber(i.str.trim())),
+  }));
 }
 
 // pages: arrays of { str, x, y } text items, one array per page.

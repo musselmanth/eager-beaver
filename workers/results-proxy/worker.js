@@ -21,7 +21,7 @@ import { DurableObject } from 'cloudflare:workers';
 
 const CLERK_URL = 'https://www.albanycountywy.gov/176/Results-of-Election';
 // Open pages with a lower CLIENT_VERSION (src/app/page.js) reload themselves.
-const MIN_CLIENT_VERSION = 1;
+const MIN_CLIENT_VERSION = 2;
 const MAX_AGE = 2 * 60 * 1000;
 // Links are checked in page order; only PDFs are kept, so this just bounds the work.
 const MAX_LINKS = 12;
