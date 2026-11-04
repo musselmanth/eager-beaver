@@ -10,6 +10,10 @@ import { readReport } from './readReport';
 // URL of the Cloudflare Worker in workers/results-proxy/worker.js. The county site
 // doesn't send CORS headers, so the browser can't read it directly.
 const PROXY_URL = 'https://albany-results-proxy.tmusselman.workers.dev/';
+// Bump this when a fix has to reach pages that are already open, then raise
+// MIN_CLIENT_VERSION in the worker once the new build is live (see the README).
+const CLIENT_VERSION = 1;
+const VERSION_CHECK_INTERVAL = 5 * 60 * 1000;
 
 const CLERK_URL = 'https://www.albanycountywy.gov/176/Results-of-Election';
 const ELECTION_DAY = Date.parse('2026-11-03T00:00:00-07:00');
@@ -528,6 +532,23 @@ export default function ResultsPage() {
       clearTimeout(first);
       clearInterval(id);
     };
+  }, []);
+
+  // Reload if the worker says this build is out of date. This runs from the
+  // countdown through the results, and the wait comes first, so a page that
+  // reloads into a stale copy can't get stuck reloading over and over.
+  useEffect(() => {
+    const id = setInterval(async () => {
+      try {
+        const res = await fetch(`${PROXY_URL}?version=1&_=${Date.now()}`, {
+          cache: 'no-store',
+          signal: AbortSignal.timeout(FETCH_TIMEOUT),
+        });
+        const { minVersion } = await res.json();
+        if (minVersion > CLIENT_VERSION) window.location.reload();
+      } catch {}
+    }, VERSION_CHECK_INTERVAL);
+    return () => clearInterval(id);
   }, []);
 
   // Keep the screen awake on the party TV.

@@ -53,3 +53,17 @@ npm install && npx wrangler login && npx wrangler deploy
 ```
 
 Then put its `*.workers.dev` URL in `PROXY_URL` at the top of `src/app/page.js`.
+
+Pushing to `main` deploys the site but not the Worker, so run `npx wrangler deploy`
+for Worker changes. Open pages pick those up on their next check.
+
+### Reloading open pages
+
+Changes to the site don't reach pages that are already open. To make them reload:
+
+1. Bump `CLIENT_VERSION` in `src/app/page.js`, push, and wait for the deploy to finish.
+2. Set `MIN_CLIENT_VERSION` in `workers/results-proxy/worker.js` to the same number
+   and run `npx wrangler deploy`.
+
+Older pages reload within about 5 minutes. Keep that order: if the Worker goes first,
+open pages keep reloading every 5 minutes until the new build is live.
