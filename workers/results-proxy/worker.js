@@ -6,6 +6,8 @@
 //                   how many vote centers have reported.
 // GET /?pdf=<url> → our cached copy of one of those report PDFs, so the page can
 //                   read it for vote totals without hitting the county site itself.
+// GET /?version=1  → JSON: the oldest page build that should stay open. This
+//                   doesn't touch the Durable Object or the county site.
 //
 // Every request goes through a single Durable Object that fetches the clerk page
 // and each PDF at most once per 2 minutes, no matter how many people have
@@ -18,6 +20,8 @@
 import { DurableObject } from 'cloudflare:workers';
 
 const CLERK_URL = 'https://www.albanycountywy.gov/176/Results-of-Election';
+// Open pages with a lower CLIENT_VERSION (src/app/page.js) reload themselves.
+const MIN_CLIENT_VERSION = 1;
 const MAX_AGE = 2 * 60 * 1000;
 // Links are checked in page order; only PDFs are kept, so this just bounds the work.
 const MAX_LINKS = 12;
@@ -204,6 +208,9 @@ export default {
       return new Response(null, { headers: CORS });
     }
     const url = new URL(request.url);
+    if (url.searchParams.has('version')) {
+      return Response.json({ minVersion: MIN_CLIENT_VERSION }, { headers: { ...CORS, 'Cache-Control': 'no-store' } });
+    }
     const stub = env.CLERK_PAGE.get(env.CLERK_PAGE.idFromName('albany'));
     const pdfHref = url.searchParams.get('pdf');
 
